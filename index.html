@@ -1,0 +1,246 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Company</title>
+	<meta property="og:site_name" content="" />
+	<meta property="og:title" content="" />
+	<meta content=">" name="description" />
+    <meta name="Keywords" content=""/>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;600;700;800&display=swap" rel="stylesheet">
+    <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css"/>
+    <link rel="stylesheet" href="/style.css">
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    
+</head>
+<body>
+
+<section id="hero">
+    <i class="fa fa-circle-info"></i>
+    <h1 id="h1">The Company</h1>
+    <h2 id="h2">Shipping Time Calculator</h2> 
+
+<aside id="aside">
+   
+
+<div id="input_section"> 
+    <i id="calendar" class="fa fa-calendar"></i>
+<input type="text" id="tarih_veri" placeholder="Order Date" onfocus="(this.type='date')" onblur="(this.type='text')" >
+
+<div id="popup" class="1"></div>
+
+</div>
+<input type="hidden" id="tarihi_gom" >
+
+<div id="input_section"> 
+<select id="fabrik_sec"> 
+  <option hidden disabled selected><h5 class="input">Fabric Type</h5></option>
+  <option>Cotton</option>
+  <option>Silk</option>
+</select>
+<div id="popup" class="2"></div>
+</div>
+<div id="input_section"> 
+    <i class="fa fa-circle-info" id="quantity_i" style="font-size:20px;font-weight:600"></i>
+<input title="text" type="text" placeholder="Quantity" id="quantity" >
+<div id="popup" class="3"></div>
+</div>
+
+ 
+</aside>
+
+<button id="buton">Calculate</button>
+
+ 
+<h3 id="h3">Please
+    enter your order information to estimate shipping date</h3>
+</section>
+ 
+
+ <script> 
+  
+   
+   $("#quantity_i").hover(function(){
+        $(".3").html("Shipping Dates May Vary Based on Quantity"); // Yazı
+        $(".3").css("display","block");
+   },function(){
+        $(".3").css("display","none");
+   });
+
+
+ 
+
+
+
+var tiklama=document.getElementById("buton");
+
+tiklama.onclick=function(){
+
+		 	
+ var tarih=document.getElementById("tarih_veri");
+ var quantity =document.getElementById("quantity");
+ var fabricc = document.getElementById("fabrik_sec")
+ const fabric = String(fabricc.value)
+
+ parcala = tarih.value;
+
+ quantity_deger = quantity.value;
+ 
+    ayir = parcala.split("-");
+
+ 
+
+    var yil = ayir[0];
+    var gun = ayir[2];
+    var ay = ayir[1];
+
+ 
+
+    yil = Number(yil);
+    gun = Number(gun);
+    ay = Number(ay) - 1;
+    
+
+    
+     
+
+    var yenizaman = new Date(yil,ay,gun);
+    document.getElementById("tarihi_gom").value = yenizaman;  
+    var yeni_tarih =document.getElementById("tarihi_gom");  
+    tarih_verisini_cek = yeni_tarih.value;
+    tarih_verisini_parcala = tarih_verisini_cek.split(" ");
+ 
+    ekrana_yaz_gun_ismi = tarih_verisini_parcala[0];
+    var CurrentDate = new Date();
+
+    if(quantity_deger==""){
+
+        $(".3").html("Please Fill All Information Correctly");
+        $(".3").css("display","block");
+
+        document.getElementById("h3").style.color = "red";    
+        document.getElementById("h3").innerHTML = "Error:Please Fill All Information Correctly";
+        
+        return;
+      
+    }
+    if(quantity_deger>=1 && quantity_deger<=100){  
+    }else{
+        $(".3").html("Quantity should be between 1 and 100");
+        $(".3").css("display","block");
+        document.getElementById("h3").style.color = "red";
+        document.getElementById("h3").innerHTML = "Error:Quantity should be between 1 and 100";
+        return;
+        
+    }
+    if(yenizaman<CurrentDate){
+        $(".1").html("Order Date should be the current day or later, it can’t be a past date");
+        $(".1").css("display","block");
+        document.getElementById("h3").style.color = "red";
+        document.getElementById("h3").innerHTML = "Error:Order Date should be the current day or later, it can’t be a past date";
+        return;
+
+    }
+
+    //cotton ve 50den az ise burada başlıyo------>
+    if((quantity_deger>=1 && quantity_deger<=100) && quantity_deger < 50 && fabric ==="Cotton" && ekrana_yaz_gun_ismi !== "Fri" && ekrana_yaz_gun_ismi !=="Thu" && ekrana_yaz_gun_ismi !=="Sat"){
+        gun = gun +2;
+    }
+
+    if((quantity_deger>=1 && quantity_deger<=100) && quantity_deger < 50 && fabric ==="Cotton" && (ekrana_yaz_gun_ismi === "Thu" || ekrana_yaz_gun_ismi === "Fri" )){
+        gun = gun +4;
+    }
+
+    if((quantity_deger>=1 && quantity_deger<=100) && quantity_deger < 50 && fabric ==="Cotton" && ekrana_yaz_gun_ismi === "Sat" ){
+        gun = gun +3;
+    }
+    //cotton ve 50den az ise burada bitiyor------->
+
+
+     //cotton ve 50den fazla ise burada Başlıyor------->
+    if((quantity_deger>=1 && quantity_deger<=100) && quantity_deger >= 50 && fabric ==="Cotton" && ekrana_yaz_gun_ismi !== "Fri" && ekrana_yaz_gun_ismi !=="Thu" && ekrana_yaz_gun_ismi !=="Wed" && ekrana_yaz_gun_ismi !=="Sat"){
+        gun = gun +3;
+    }
+
+    if((quantity_deger>=1 && quantity_deger<=100) && quantity_deger >= 50 && fabric ==="Cotton" && ekrana_yaz_gun_ismi === "Sat"){
+        gun = gun +4;
+    }
+
+    if((quantity_deger>=1 && quantity_deger<=100) && quantity_deger >= 50 && fabric ==="Cotton" && (ekrana_yaz_gun_ismi === "Wed" || ekrana_yaz_gun_ismi === "Thu" || ekrana_yaz_gun_ismi === "Fri")){
+        gun = gun +5;
+    }
+    //cotton ve 50den fazla ise burada Bitiyor------->
+
+    //silk 50 den az ise burada başlıyor------>
+    if((quantity_deger>=1 && quantity_deger<=100) && quantity_deger < 50 && fabric ==="Silk" && ekrana_yaz_gun_ismi !== "Fri" && ekrana_yaz_gun_ismi !=="Thu" && ekrana_yaz_gun_ismi !=="Wed" && ekrana_yaz_gun_ismi !=="Tue" && ekrana_yaz_gun_ismi !=="Sat"){
+        gun = gun +4;
+    }
+
+    if((quantity_deger>=1 && quantity_deger<=100) && quantity_deger < 50 && fabric ==="Silk" && ekrana_yaz_gun_ismi ==="Sat"){
+        gun = gun +5;
+    }
+
+    if((quantity_deger>=1 && quantity_deger<=100) && quantity_deger < 50 && fabric ==="Silk" && (ekrana_yaz_gun_ismi === "Tue" || ekrana_yaz_gun_ismi === "Wed" || ekrana_yaz_gun_ismi === "Thu" || ekrana_yaz_gun_ismi === "Fri" )){
+        gun = gun +6;
+    }
+
+
+    //silk 50 den az ise burada bitiyor------>
+
+
+    //Silk 50 den fazlaysa burada başlıyor------->
+    if((quantity_deger>=1 && quantity_deger<=100) && quantity_deger >= 50 && fabric ==="Silk" && ekrana_yaz_gun_ismi==="Sat" && ekrana_yaz_gun_ismi!=="Sun"){
+        gun = gun +6;
+    }
+
+    if((quantity_deger>=1 && quantity_deger<=100) && quantity_deger >= 50 && fabric ==="Silk" && ekrana_yaz_gun_ismi==="Sun"){
+        gun = gun +5;
+    }
+
+
+    if((quantity_deger>=1 && quantity_deger<=100) && quantity_deger >= 50 && fabric ==="Silk" && ekrana_yaz_gun_ismi!=="Sat" && ekrana_yaz_gun_ismi!=="Sun"){
+        gun = gun +7;
+    }
+      //Silk 50 den fazlaysa burada bitiyor------->
+    
+
+
+     
+    var yenizaman = new Date(yil,ay,gun);
+    document.getElementById("tarihi_gom").value = yenizaman;  
+    var yeni_tarih =document.getElementById("tarihi_gom");  
+
+ 
+     
+
+   
+ 
+  document.getElementById("tarihi_gom").value = yenizaman; /// veriyi inputa gömdük.
+  var yeni_tarih =document.getElementById("tarihi_gom"); /// input verisini seç
+  tarih_verisini_cek = yeni_tarih.value;
+  tarih_verisini_parcala = tarih_verisini_cek.split(" ");
+
+
+ 
+ 
+
+  ekrana_yaz_ay = tarih_verisini_parcala[1];
+  ekrana_yaz_gun = tarih_verisini_parcala[2];
+  ekrana_yaz_yil = tarih_verisini_parcala[3];
+
+    document.getElementById("h3").style.color = "#2B2E39";
+    document.getElementById("h3").innerHTML = ("Your Estimated Shipping Date is <b>"+ " " + ekrana_yaz_gun +" " + ekrana_yaz_ay + " "+ekrana_yaz_yil )
+//   document.write(ekrana_yaz_gun + " " + ekrana_yaz_ay + " " + ekrana_yaz_yil);
+ 
+   
+};
+</script>
+</body>
+</html>
